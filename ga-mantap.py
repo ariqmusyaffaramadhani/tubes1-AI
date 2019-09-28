@@ -40,21 +40,27 @@ def fitness(chrm):
 
 
 def populesyen():
-    kro = []
-    fit = []
+    pop = []
     for i in range(10): #banyak populasi = 10
-        chrm = chrom()
-        kro.append(chrm)
-        fit.append(fitness(chrm))
-    
-    # print(len(kro))
-    # print(len(fit))
+        pop.append(chrom())
+    return pop
+
+def populesyen_fitness(pop):
+    fit = []
+    for i in range(len(pop)): 
+        fit.append(fitness(pop[i]))
+
     print('       kromosom           |       fitness')
     print('--------------------------|------------------------')
-    for j in range(len(kro)):
-        print(kro[j],' | ', fit[j]) 
+    for j in range(len(pop)):
+        print(pop[j],' | ', fit[j]) 
         
+    return fit
 
-#main_prog
 
-populesyen()
+
+
+
+#-------------------------------------------------MAIN_PROG--------------------------------------------------------
+
+populesyen_fitness(populesyen())
