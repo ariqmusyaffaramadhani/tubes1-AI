@@ -36,7 +36,7 @@ def calc_func(x1,x2):
 def fitness(chrm): #inputan berupa individu
     x1,x2 = encodechrom(chrm)
     f = calc_func(x1,x2)
-    return 1/(f + 1)
+    return 1/(f + 0.001)
 
 
 def populesyen():
@@ -58,12 +58,40 @@ def populesyen_fitness(pop): #inputan berupa populasi
     return fit
 
 
-def paret_sel(pop):  #tournament_selection, menghasilkan 1 indv sebagai parent
-    best = []
-    for i in range 10
+def parent_sel(pop):  #tournament_selection, menghasilkan 2 indv sebagai parent
+    best1 = []
+    best2 = []
+
+    for i in range(10):
         krom = pop[random.randint(0,9)]  #generate individu random dari 0-9 (karena ada 10 populasi)
-        if len(best)==0 or fitness(krom) > fitness(best)
+        if len(best1)==0 or fitness(krom) > fitness(best1):
+            best1 = krom
 
-#-------------------------------------------------MAIN_PROG--------------------------------------------------------
+    for i in range(10):
+        krom = pop[random.randint(0,9)]  #generate individu random dari 0-9 (karena ada 10 populasi)
+        if len(best2)==0 or fitness(krom) > fitness(best2) and krom != best1: #cari best2 tapi != best1
+            best2 = krom
 
-populesyen_fitness(populesyen())
+    return best1,best2
+
+
+def crossover(p1,p2):
+    tipot = random.randint(0,7)
+    for i in range(tipot, 8):
+        temp = p1[i]
+        p1[i] = p2[i]
+        p2[i] = temp
+    return p1,p2 #child baru
+
+def mutation(c1,c2):
+    timut = random.randint(0,7) #titik mutasi
+    
+
+#-------------------------------------------------MAIN_PROG-------------------------------------------------#
+
+
+pop = populesyen()
+populesyen_fitness(pop)
+best1,best2 = parent_sel(pop)
+print("best parent : ",best1, best2)
+print("hasil cross :",crossover(best1,best2))
