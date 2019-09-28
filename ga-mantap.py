@@ -77,21 +77,56 @@ def parent_sel(pop):  #tournament_selection, menghasilkan 2 indv sebagai parent
 
 def crossover(p1,p2):
     tipot = random.randint(0,7)
-    for i in range(tipot, 8):
-        temp = p1[i]
-        p1[i] = p2[i]
-        p2[i] = temp
+    prob = 0.02 #probabilitas crossover
+    x = random.uniform(0.0,1.0)
+    if x >= prob:
+        for i in range(tipot, 8):
+            temp = p1[i]
+            p1[i] = p2[i]
+            p2[i] = temp
     return p1,p2 #child baru
 
 def mutation(c1,c2):
-    timut = random.randint(0,7) #titik mutasi
+    prob = 0.02 #probabilitas mutasi
+    x = random.uniform(0.0,1.0)
+    t1 = random.randint(0,7) #titik mutasi
+    t2 = random.randint(0,7)
+    if x >= prob:
+        c1[t1] = random.randint(0,7)
+        c2[t2] = random.randint(0,7)
+    return c1,c2    
+
+
+def newpop_generator(pop): #indikator generasi
+    populesyen_fitness(pop)
+    newpopulesyen = []
+    for i in range(5): #mendapatkan mutasi sebanyak populasi(10)
+        best1,best2 = parent_sel(pop)
+        c1,c2 = crossover(best1,best2)
+        m1,m2 = mutation(c1,c2)
+        newpopulesyen.append(m1)
+        newpopulesyen.append(m2)
+    return newpopulesyen
+
+
+def gener_generator():
     
 
 #-------------------------------------------------MAIN_PROG-------------------------------------------------#
 
 
+# pop = populesyen()
+# populesyen_fitness(pop)
+# best1,best2 = parent_sel(pop)
+# print("best parent  : ",best1, best2)
+# c1,c2 = crossover(best1,best2)
+# print("hasil cross  : ",c1, c2)
+# m1,m2 = mutation(c1,c2)
+# print("hasil mutasi : ",m1, m2)
+
+
 pop = populesyen()
-populesyen_fitness(pop)
-best1,best2 = parent_sel(pop)
-print("best parent : ",best1, best2)
-print("hasil cross :",crossover(best1,best2))
+print("Generasi 1")
+new = gen_generator(pop)
+print("Generasi 2")
+populesyen_fitness(new)
