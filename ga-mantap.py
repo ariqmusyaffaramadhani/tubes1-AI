@@ -33,7 +33,7 @@ def calc_func(x1,x2):
 
 
 
-def fitness(chrm):
+def fitness(chrm): #inputan berupa individu
     x1,x2 = encodechrom(chrm)
     f = calc_func(x1,x2)
     return 1/(f + 1)
@@ -45,7 +45,7 @@ def populesyen():
         pop.append(chrom())
     return pop
 
-def populesyen_fitness(pop):
+def populesyen_fitness(pop): #inputan berupa populasi
     fit = []
     for i in range(len(pop)): 
         fit.append(fitness(pop[i]))
@@ -58,8 +58,11 @@ def populesyen_fitness(pop):
     return fit
 
 
-
-
+def paret_sel(pop):  #tournament_selection, menghasilkan 1 indv sebagai parent
+    best = []
+    for i in range 10
+        krom = pop[random.randint(0,9)]  #generate individu random dari 0-9 (karena ada 10 populasi)
+        if len(best)==0 or fitness(krom) > fitness(best)
 
 #-------------------------------------------------MAIN_PROG--------------------------------------------------------
 
