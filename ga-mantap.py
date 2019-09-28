@@ -45,17 +45,11 @@ def populesyen():
         pop.append(chrom())
     return pop
 
-def populesyen_fitness(pop): #inputan berupa populasi
-    fit = []
-    for i in range(len(pop)): 
-        fit.append(fitness(pop[i]))
-
-    print('       kromosom           |       fitness')
-    print('--------------------------|------------------------')
-    for j in range(len(pop)):
-        print(pop[j],' | ', fit[j]) 
-        
-    return fit
+# def populesyen_fitness(pop): #inputan berupa populasi
+#     fit = []
+#     for i in range(len(pop)): 
+#         fit.append(fitness(pop[i]))
+#     return fit
 
 
 def parent_sel(pop):  #tournament_selection, menghasilkan 2 indv sebagai parent
@@ -78,7 +72,7 @@ def parent_sel(pop):  #tournament_selection, menghasilkan 2 indv sebagai parent
 def crossover(p1,p2):
     tipot = random.randint(0,7)
     prob = 0.02 #probabilitas crossover
-    x = random.uniform(0.0,1.0)
+    x = random.random()
     if x >= prob:
         for i in range(tipot, 8):
             temp = p1[i]
@@ -88,7 +82,7 @@ def crossover(p1,p2):
 
 def mutation(c1,c2):
     prob = 0.02 #probabilitas mutasi
-    x = random.uniform(0.0,1.0)
+    x = random.random()
     t1 = random.randint(0,7) #titik mutasi
     t2 = random.randint(0,7)
     if x >= prob:
@@ -98,7 +92,7 @@ def mutation(c1,c2):
 
 
 def newpop_generator(pop): #indikator generasi
-    populesyen_fitness(pop)
+    
     newpopulesyen = []
     for i in range(5): #mendapatkan mutasi sebanyak populasi(10)
         best1,best2 = parent_sel(pop)
@@ -109,24 +103,71 @@ def newpop_generator(pop): #indikator generasi
     return newpopulesyen
 
 
-def gener_generator():
-    
+def show_pop(pop):
+    fit = []
+    for i in range(len(pop)): 
+        fit.append(fitness(pop[i]))
+    print('       kromosom           |       fitness')
+    print('--------------------------|------------------------')
+    for j in range(len(pop)):
+        print(pop[j],' | ', fit[j]) 
+        
+
+def show_krom(x):
+    print('       kromosom           |       fitness')
+    print('--------------------------|------------------------')
+    print(x,' | ',fitness(x))
+
+
+
+def catch_local_best(pop):
+    best_fit = -9999
+    best_local = []
+    for i in range(len(pop)):
+        if fitness(pop[i]) > best_fit:
+            best_fit = fitness(pop[i])
+            best_local = pop[i]
+    return best_local
+
+def find_best_global(arr_best_local):
+    best_fit = -9999
+    best = []
+    for i in range(len(arr_best_local)):
+        f = fitness(arr_best_local[i])
+        if f > best_fit:
+            best_fit = f
+            best = arr_best_local[i]
+    return best
 
 #-------------------------------------------------MAIN_PROG-------------------------------------------------#
 
 
-# pop = populesyen()
-# populesyen_fitness(pop)
-# best1,best2 = parent_sel(pop)
-# print("best parent  : ",best1, best2)
-# c1,c2 = crossover(best1,best2)
-# print("hasil cross  : ",c1, c2)
-# m1,m2 = mutation(c1,c2)
-# print("hasil mutasi : ",m1, m2)
-
-
+gen = []
+best_locals = []
 pop = populesyen()
-print("Generasi 1")
-new = gen_generator(pop)
-print("Generasi 2")
-populesyen_fitness(new)
+
+gen.append(pop)
+print("Generation : 1")
+show_pop(pop)
+w = catch_local_best(pop)
+print("best local : ", w)
+best_locals.append(w)
+print("fitness    : ", fitness(w))
+print()
+
+for i in range(8):
+    new = newpop_generator(gen[i])
+    gen.append(new)
+    print("Generation : ",i+2)
+    show_pop(new)
+    w = catch_local_best(pop)
+    print("best local : ", w)
+    best_locals.append(w) 
+    print("fitness    : ", fitness(w))
+    print()
+
+
+best = find_best_global(best_locals)
+print("------------------------------------------------------")
+print("best    : ",best)
+print("fitness : ",fitness(best))
