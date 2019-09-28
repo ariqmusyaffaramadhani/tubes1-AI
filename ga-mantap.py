@@ -33,7 +33,7 @@ def calc_func(x1,x2):
 
 
 
-def fitness(chrm): #inputan berupa individu
+def fitness(chrm): #inputan individu
     x1,x2 = encodechrom(chrm)
     f = calc_func(x1,x2)
     return 1/(f + 0.001)
@@ -55,17 +55,14 @@ def populesyen():
 def parent_sel(pop):  #tournament_selection, menghasilkan 2 indv sebagai parent
     best1 = []
     best2 = []
-
     for i in range(10):
         krom = pop[random.randint(0,9)]  #generate individu random dari 0-9 (karena ada 10 populasi)
         if len(best1)==0 or fitness(krom) > fitness(best1):
             best1 = krom
-
     for i in range(10):
         krom = pop[random.randint(0,9)]  #generate individu random dari 0-9 (karena ada 10 populasi)
         if len(best2)==0 or fitness(krom) > fitness(best2) and krom != best1: #cari best2 tapi != best1
             best2 = krom
-
     return best1,best2
 
 
@@ -122,52 +119,71 @@ def show_krom(x):
 
 def catch_local_best(pop):
     best_fit = -9999
-    best_local = []
+    
     for i in range(len(pop)):
         if fitness(pop[i]) > best_fit:
             best_fit = fitness(pop[i])
             best_local = pop[i]
     return best_local
 
-def find_best_global(arr_best_local):
-    best_fit = -9999
-    best = []
-    for i in range(len(arr_best_local)):
-        f = fitness(arr_best_local[i])
-        if f > best_fit:
-            best_fit = f
-            best = arr_best_local[i]
-    return best
+# def find_best_global(arr_best_local):
+#     best_fit = -9999
+#     best = []
+#     for i in range(len(arr_best_local)):
+#         f = fitness(arr_best_local[i])
+#         if f > best_fit:
+#             best_fit = f
+#             best = arr_best_local[i]
+#     return best
+
+def throw_indx(arr):
+    x = -99999
+    idx = 0
+    for i in range(len(arr)):
+        if arr[i] > x:
+            x = arr[i]
+            idx = i
+    return idx
 
 #-------------------------------------------------MAIN_PROG-------------------------------------------------#
 
+best_chrm = []
+best_fit  = []
 
-gen = []
-best_locals = []
 pop = populesyen()
-
-gen.append(pop)
-print("Generation : 1")
-show_pop(pop)
-w = catch_local_best(pop)
-print("best local : ", w)
-best_locals.append(w)
-print("fitness    : ", fitness(w))
+b = catch_local_best(pop)
+best_chrm.append(b)
+best_fit.append(fitness(b))
+print("best local    : ",b)
+print("fitness : ",fitness(b))
 print()
 
-for i in range(8):
-    new = newpop_generator(gen[i])
-    gen.append(new)
-    print("Generation : ",i+2)
-    show_pop(new)
-    w = catch_local_best(pop)
-    print("best local : ", w)
-    best_locals.append(w) 
-    print("fitness    : ", fitness(w))
+new = newpop_generator(pop)
+x = catch_local_best(new)
+best_chrm.append(x)
+best_fit.append(fitness(x))
+print("best local    : ",x)
+print("fitness : ",fitness(x))
+print()
+
+itr = 0
+while itr!=5:
+    new = newpop_generator(new)
+    x = catch_local_best(new)
+    best_chrm.append(x)
+    best_fit.append(fitness(x))
+    print("best local    : ",x)
+    print("fitness : ",fitness(x))
     print()
+    itr+=1
 
 
-best = find_best_global(best_locals)
-print("------------------------------------------------------")
-print("best    : ",best)
-print("fitness : ",fitness(best))
+# print("----------isi best-------------")
+# for i in range(len(best_chrm)):
+#     print(best_chrm[i]," | ",best_fit[i])
+
+idx = throw_indx(best_fit)
+print("best    : ",best_chrm[idx])
+print("fitness : ",best_fit[idx])
+x1,x2 = encodechrom(best_chrm[idx])
+print("x1,x2   : ",x1,x2)
