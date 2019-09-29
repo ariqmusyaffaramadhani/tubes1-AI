@@ -4,7 +4,7 @@ import numpy as np
 def chrom():
     X = []
     for i in range(8):
-        X.append(random.randint(0,7))
+        X.append(random.randint(0,10))
     return X
 
 
@@ -78,7 +78,7 @@ def crossover(p1,p2):
     return p1,p2 #child baru
 
 def mutation(c1,c2):
-    prob = 0.02 #probabilitas mutasi
+    prob = 0.09#probabilitas mutasi
     x = random.random()
     t1 = random.randint(0,7) #titik mutasi
     t2 = random.randint(0,7)
@@ -167,7 +167,7 @@ print("fitness : ",fitness(x))
 print()
 
 itr = 0
-while itr!=5:
+while itr!=1000:
     new = newpop_generator(new)
     x = catch_local_best(new)
     best_chrm.append(x)
